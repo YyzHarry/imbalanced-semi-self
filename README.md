@@ -4,7 +4,7 @@ This repository contains the implementation code for paper: <br>
 __Rethinking the Value of Labels for Improving Class-Imbalanced Learning__ <br>
 [Yuzhe Yang](http://www.mit.edu/~yuzhe/), and [Zhi Xu](http://www.mit.edu/~zhixu/) <br>
 _34th Conference on Neural Information Processing Systems (__NeurIPS 2020__)_ <br>
-[[Website](http://www.mit.edu/~yuzhe/imbalanced-semi-self.html)] [[arXiv](https://arxiv.org/abs/2006.07529)] [[Paper](https://arxiv.org/pdf/2006.07529.pdf)] [[Slides]()] [[Video]()]
+[Website] [[arXiv](https://arxiv.org/abs/2006.07529)] [[Paper](https://arxiv.org/pdf/2006.07529.pdf)] [Slides] [Video]
 
 
 ## Overview
@@ -68,7 +68,7 @@ To perform pseudo-labeling (self-training), first a base classifier is trained o
 ```bash
 python gen_pseudolabels.py --resume <ckpt-path> --data_dir <data_path> --output_dir <output_path> --output_filename <save_name>
 ```
-We provide generated pseudo label files for CIFAR-10-LT & SVHN-LT with `\rho=50`, using base model with standard CE training:
+We provide generated pseudo label files for CIFAR-10-LT & SVHN-LT with `\rho=50`, using base models trained with standard cross-entropy (CE) loss:
 - [Generated pseudo labels for CIFAR-10-LT with `\rho=50`](https://drive.google.com/file/d/1Z4rwaqzjNoNQ27sofx1aDl8OLH-etoyP/view?usp=sharing)
 - [Generated pseudo labels for SVHN-LT with `\rho=50`](https://drive.google.com/file/d/19VeMQ07unVq3hIjLN5LiXWZNTI4CiN5F/view?usp=sharing)
 
@@ -104,6 +104,99 @@ python -m imagenet_inat.main --cfg <path_to_ssp_config>
 
 ## Results and Models
 
+All related data and checkpoints can be found via [this link](https://drive.google.com/drive/folders/1VbdqYZ0sqyApM6AdmCgsZd46TsPlQcpT?usp=sharing). Individual results and checkpoints are detailed as follows.
+
+### Semi-Supervised Imbalanced Learning
+#### CIFAR-10-LT
+|   Model   | Top-1 Error |   Download    |
+| --------- |:-----------:|:-------------:|
+|CE + D_U@5x (`\rho=50` and `\rho_U=1`) |  16.79 | [ResNet-32](https://drive.google.com/file/d/1gIzvqSBf87LA_NGi0Ov488OVBAlCsAhr/view?usp=sharing) |
+|CE + D_U@5x (`\rho=50` and `\rho_U=25`) |  16.88 | [ResNet-32](https://drive.google.com/file/d/18ACYaEvIOF_neoDCoVOorQGqcv8-qmyd/view?usp=sharing) |
+|CE + D_U@5x (`\rho=50` and `\rho_U=50`) | 18.36 | [ResNet-32](https://drive.google.com/file/d/17eEb_USf2fgDq6vURzi2q3tda8DvTmzG/view?usp=sharing) |
+|CE + D_U@5x (`\rho=50` and `\rho_U=100`) | 19.94  | [ResNet-32](https://drive.google.com/file/d/19eVBcGcA3eoD9ayxCw09Gn1wtWsESSwS/view?usp=sharing) |
+
+#### SVHN-LT
+|   Model   | Top-1 Error |   Download    |
+| --------- |:-----------:|:-------------:|
+|CE + D_U@5x (`\rho=50` and `\rho_U=1`) |  13.07 | [ResNet-32](https://drive.google.com/file/d/1i4baS9QT8atmiF1QZwIDua4mSoRUQb_E/view?usp=sharing) |
+|CE + D_U@5x (`\rho=50` and `\rho_U=25`) |  13.36 | [ResNet-32](https://drive.google.com/file/d/1r_fkQtZYUYMxP9Angpjd_bDPY4iy31IQ/view?usp=sharing) |
+|CE + D_U@5x (`\rho=50` and `\rho_U=50`) | 13.16 | [ResNet-32](https://drive.google.com/file/d/1sBkqxI2GiStMWUjKGAmmXLLgT0bJTb0T/view?usp=sharing) |
+|CE + D_U@5x (`\rho=50` and `\rho_U=100`) | 14.54 | [ResNet-32](https://drive.google.com/file/d/1HGNk-tc3iy1cxbTlYGf8nboMZYIUN1nQ/view?usp=sharing) |
+
+To test a pretrained checkpoint, e.g., on CIFAR-10:
+```bash
+python train_semi.py --dataset cifar10 --resume <ckpt-path> -e
+```
+
+### Self-Supervised Imbalanced Learning
+#### CIFAR-10-LT
+- Self-supervised pre-trained models (Rotation)
+
+  |  Dataset Setting  |  `\rho=100` | `\rho=50` | `\rho=10` |
+  | ---------- |:-----------:|:-----------:|:-----------:|
+  | __Download__ | [ResNet-32](https://drive.google.com/file/d/1FVjuKvBrNBFrSRRLDmYpOsTZADsdDKfx/view?usp=sharing) |  [ResNet-32](https://drive.google.com/file/d/1HnJNTmWOS8Js6TjpFKmCcj87U3BvldqI/view?usp=sharing) | [ResNet-32](https://drive.google.com/file/d/1YXVlHDwVNPRHpbEUxEHCzVp_4lToX0N9/view?usp=sharing) |
+
+- Final models (200 epochs)
+
+  |   Model   |     `\rho`    | Top-1 Error |   Download    |
+  | --------- |:-------------:|:-----------:|:-------------:|
+  |CE(Uniform) + SSP| 10 |  12.28 | [ResNet-32](https://drive.google.com/file/d/1sk6j_QWwiCpbbulMOCnZAgDUxv28S85F/view?usp=sharing) |
+  |CE(Uniform) + SSP| 50 |  21.80 | [ResNet-32](https://drive.google.com/file/d/1CnWBII1IqgtC-rXlk2NzMVwDJUPP6dxE/view?usp=sharing) |
+  |CE(Uniform) + SSP| 100 |  26.50 | [ResNet-32](https://drive.google.com/file/d/1hhc5P3cLWHYkCmKrk1Zvl5XwXsegpdQS/view?usp=sharing) |
+  |CE(Balanced) + SSP| 10 |  11.57 | [ResNet-32](https://drive.google.com/file/d/1wSG3lk2u1n5WYb4iY0D8EMG4ERhWxJN1/view?usp=sharing) |
+  |CE(Balanced) + SSP| 50 |  19.60 | [ResNet-32](https://drive.google.com/file/d/1EoyWw9sXucCyUdOQ1m6QLc6jDr2VceCG/view?usp=sharing) |
+  |CE(Balanced) + SSP| 100 |  23.47 | [ResNet-32](https://drive.google.com/file/d/1Hkle1XEjzNrRRYbRRN-3aZkVlauwU161/view?usp=sharing) |
+
+#### CIFAR-100-LT
+- Self-supervised pre-trained models (Rotation)
+
+  |  Dataset Setting  |  `\rho=100` | `\rho=50` | `\rho=10` |
+  | ---------- |:-----------:|:-----------:|:-----------:|
+  | __Download__ | [ResNet-32](https://drive.google.com/file/d/1gTlVOG9Wf3m6mcjvsjaqYFt6NsyIaWGn/view?usp=sharing) |  [ResNet-32](https://drive.google.com/file/d/1Rvhdscw2ZfDRAsCQ3a_A-o_Ay3UEeu3c/view?usp=sharing) | [ResNet-32](https://drive.google.com/file/d/1iOCguSnCXJrFDLe1mmmnK39dnLPcDv4Y/view?usp=sharing) |
+  
+- Final models (200 epochs)
+
+  |   Model   |     `\rho`    | Top-1 Error |   Download    |
+  | --------- |:-------------:|:-----------:|:-------------:|
+  |CE(Uniform) + SSP| 10 |  42.93 | [ResNet-32](https://drive.google.com/file/d/1aXwZ5Zm2LGUYJuzL9AbCD4a0G3clx-0O/view?usp=sharing) |
+  |CE(Uniform) + SSP| 50 |  54.96 | [ResNet-32](https://drive.google.com/file/d/11I60p5tNEf1KOXI2CnqMP7oph540ufjC/view?usp=sharing) |
+  |CE(Uniform) + SSP| 100 |  59.60 | [ResNet-32](https://drive.google.com/file/d/1I5Ro0Jdw30fT28XPzV4jZYbg0htlukfw/view?usp=sharing) |
+  |CE(Balanced) + SSP| 10 |  41.94 | [ResNet-32](https://drive.google.com/file/d/1URi-XE4Ua9Eahl1mzK4sTvolOdabaJ4q/view?usp=sharing) |
+  |CE(Balanced) + SSP| 50 |  52.91 | [ResNet-32](https://drive.google.com/file/d/1HXUYWDnywJ9CSSvwWIKMOlX2u5LNOl_w/view?usp=sharing) |
+  |CE(Balanced) + SSP| 100 |  56.94 | [ResNet-32](https://drive.google.com/file/d/1Fsg8wWpEScNXzdBavfs8Kxl3efAz-MAP/view?usp=sharing) |
+
+#### ImageNet-LT
+- Self-supervised pre-trained models (MoCo) <br>
+  [[ResNet-50](https://drive.google.com/file/d/1XritMl3dYa9iW-TomaKU1XLQJVqgopMz/view?usp=sharing)]
+
+- Final models (90 epochs)
+
+  |   Model   | Top-1 Error |   Download    |
+  | --------- |:-----------:|:-------------:|
+  |CE(Uniform) + SSP |  54.4 | [ResNet-50](https://drive.google.com/file/d/13Bxu4yzSoZAzh_q--HtrFTRA4K2WiU8W/view?usp=sharing) |
+  |CE(Balanced) + SSP |  52.4 | [ResNet-50](https://drive.google.com/file/d/1a4QTeCWrQq3Sow2raYl_ASzSDTBq48xs/view?usp=sharing) |
+  |cRT + SSP |  48.7 | [ResNet-50](https://drive.google.com/file/d/1LAe-2gGZ4dVKy76wIpT-FbBR-kuyCfJ4/view?usp=sharing) |
+
+#### iNaturalist 2018
+- Self-supervised pre-trained models (MoCo) <br>
+  [[ResNet-50](https://drive.google.com/file/d/1uY1KyofLf5Wp-fKU9lA47G7MXZkmI8rQ/view?usp=sharing)]
+
+- Final models (90 epochs)
+
+  |   Model   | Top-1 Error |   Download    |
+  | --------- |:-----------:|:-------------:|
+  |CE(Uniform) + SSP |  35.6 | [ResNet-50](https://drive.google.com/file/d/1Ry0afHMGkx6sh7Z8sM9zUtc2VclTCF9h/view?usp=sharing) |
+  |CE(Balanced) + SSP |  34.1 | ResNet-50 |
+  |cRT + SSP |  31.9 | [ResNet-50](https://drive.google.com/file/d/1bAUFns0CJJJi2-6MpvXCOmRlcciv1ef3/view?usp=sharing) |
+
+To test a pretrained checkpoint:
+```bash
+# test on CIFAR-10 / CIFAR-100
+python train.py --dataset cifar10 --resume <ckpt-path> -e
+
+# test on ImageNet-LT / iNaturalist 2018
+python -m imagenet_inat.main --cfg <path_to_ssp_config> --model_dir <path_to_model> --test
+```
 
 
 ## Acknowledgements
