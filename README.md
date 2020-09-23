@@ -7,39 +7,49 @@ _34th Conference on Neural Information Processing Systems (__NeurIPS 2020__)_ <b
 [[Website](http://www.mit.edu/~yuzhe/imbalanced-semi-self.html)] [[arXiv](https://arxiv.org/abs/2006.07529)] [[Paper](https://arxiv.org/pdf/2006.07529.pdf)] [[Slides]()] [[Video]()]
 
 
-## Overview and Outline
+## Overview
 In this work, we show theoretically and empirically that, both __semi-supervised learning__ (using unlabeled data) and __self-supervised pre-training__ (first pre-train the model with self-supervision) can substantially improve the performance on imbalanced (long-tailed) datasets, regardless of the imbalanceness on labeled/unlabeled data and the base training techniques.
 
+__Semi-Supervised Imbalanced Learning__: 
+Using unlabeled data helps to shape clearer class boundaries and results in better class separation, especially for the tail classes.
+![semi](assets/tsne_semi.png)
 
-## Dependencies
-1. PyTorch (>=1.2, tested on 1.4)
-2. yaml
-3. scikit-learn
-4. TensorboardX
-
-
-## Prerequisites & Installation
-1. Download CIFAR & SVHN dataset, and place them in your <data_path>
-2. Download ImageNet & iNaturalist 2018 dataset, and place them in your <data_path>
-3. Download .txt files of train/val/test splits for ImageNet-LT & iNaturalist 2018 from [2], and place it in `./dataset` and `./imagenet_inat/data/`
+__Self-Supervised Imbalanced Learning__:
+Self-supervised pre-training (SSP) helps mitigate the tail classes leakage during testing, which results in better learned boundaries and representations.
+![self](assets/tsne_self.png)
 
 
-## Main Files
-- ``train.py'': train model with (without) SSP, on CIFAR-LT / SVHN-LT
-- ``train_semi.py'': train model with extra unlabeled data, on CIFAR-LT / SVHN-LT
-- ``imagenet_inat/main.py'': train model with (without) SSP, on ImageNet-LT / iNaturalist 2018
+## Installation
+
+### Prerequisites
+- Download [CIFAR](https://www.cs.toronto.edu/~kriz/cifar.html) & [SVHN](http://ufldl.stanford.edu/housenumbers/) dataset, and place them in your `data_path`
+- Download [ImageNet](http://image-net.org/download) & [iNaturalist 2018](https://github.com/visipedia/inat_comp/tree/master/2018) dataset, and place them in your `data_path`
+- Change the `data_root` in [`imagenet_inat/main.py`](./imagenet_inat/main.py) accordingly for ImageNet-LT & iNaturalist 2018
+
+### Dependencies
+- PyTorch (>= 1.2, tested on 1.4)
+- yaml
+- scikit-learn
+- TensorboardX
 
 
-## Main Arguments
-- ``--dataset'': name of chosen long-tailed dataset
-- ``--imb_factor'': imbalance factor (inverse value of the defined "imbalance ratio \rho" in our paper)
-- ``--imb_factor_unlabel'': imbalance factor for unlabeled data
-- ``--pretrained_model'': path to (self-supervised) pre-trained models
+## Code Overview
 
-Other arguments are listed in each file with explanations.
+### Main Files
+- [`train_semi.py`](train_semi.py): train model with extra unlabeled data, on CIFAR-LT / SVHN-LT
+- [`train.py`](train.py): train model with (or without) SSP, on CIFAR-LT / SVHN-LT
+- [`imagenet_inat/main.py`](./imagenet_inat/main.py): train model with (or without) SSP, on ImageNet-LT / iNaturalist 2018
+- [`pretrain_rot.py`](pretrain_rot.py) & [`pretrain_moco.py`](pretrain_moco.py): self-supervised pre-training using [Rotation prediction](https://arxiv.org/pdf/1803.07728.pdf) or [MoCo](https://arxiv.org/abs/1911.05722)
+
+### Main Arguments
+- `--dataset`: name of chosen long-tailed dataset
+- `--imb_factor`: imbalance factor (inverse value of imbalance ratio `\rho` in the paper)
+- `--imb_factor_unlabel`: imbalance factor for unlabeled data (inverse value of unlabeled imbalance ratio `\rho_U` in the paper)
+- `--pretrained_model`: path to self-supervised pre-trained models
+- `--resume`: path to resume checkpoint (also for evaluation)
 
 
-## Usage
+## Getting Started
 
 ### Semi-supervised learning with pseudo-labeling
 Generate pseudo-labels using base classifier trained on original imbalanced dataset
@@ -47,7 +57,7 @@ Generate pseudo-labels using base classifier trained on original imbalanced data
 python gen_pseudolabels.py --data_dir <data_path> --output_dir <output_path> --output_filename <save_name>
 ```
 
-Train with unlabeled data on CIFAR-10-LT with \rho=100, and \rho_U=100
+Train with unlabeled data on CIFAR-10-LT with `\rho=100` and `\rho_U=100`
 ```
 python train_semi.py --dataset cifar10 --imb_factor 0.01 --imb_factor_unlabel 0.01
 ```
@@ -76,11 +86,17 @@ python imagenet_inat/main.py --cfg <path_to_your_config>
 
 
 ## Acknowledgements
-This code is partly based on the open-source implementations from [1,2,3,4].
+This code is partly based on the open-source implementations from the following sources:
+[OpenLongTailRecognition](https://github.com/zhmiao/OpenLongTailRecognition-OLTR), [classifier-balancing](https://github.com/facebookresearch/classifier-balancing), [LDAM-DRW](https://github.com/kaidic/LDAM-DRW), [MoCo](https://github.com/facebookresearch/moco), and [semisup-adv](https://github.com/yaircarmon/semisup-adv).
 
 
-## Reference
-[1] https://github.com/zhmiao/OpenLongTailRecognition-OLTR.\
-[2] https://github.com/facebookresearch/classifier-balancing.\
-[3] https://github.com/kaidic/LDAM-DRW.\
-[4] https://github.com/facebookresearch/moco.
+## Citation
+If you find the idea or code useful for your research, please cite [our paper](https://arxiv.org/abs/2006.07529):
+```bib
+@inproceedings{yang2020rethinking,
+  title={Rethinking the Value of Labels for Improving Class-Imbalanced Learning},
+  author={Yang, Yuzhe and Xu, Zhi},
+  booktitle={Conference on Neural Information Processing Systems (NeurIPS)},
+  year={2020},
+}
+```
