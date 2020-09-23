@@ -22,8 +22,8 @@ Self-supervised pre-training (SSP) helps mitigate the tail classes leakage durin
 ## Installation
 
 ### Prerequisites
-- Download [CIFAR](https://www.cs.toronto.edu/~kriz/cifar.html) & [SVHN](http://ufldl.stanford.edu/housenumbers/) dataset, and place them in your `data_path`
-- Download [ImageNet](http://image-net.org/download) & [iNaturalist 2018](https://github.com/visipedia/inat_comp/tree/master/2018) dataset, and place them in your `data_path`
+- Download [CIFAR](https://www.cs.toronto.edu/~kriz/cifar.html) & [SVHN](http://ufldl.stanford.edu/housenumbers/) dataset, and place them in your `data_path`. Original data will be converted by [`imbalance_cifar.py`](dataset/imbalance_cifar.py) and [`imbalance_svhn.py`](dataset/imbalance_svhn.py)
+- Download [ImageNet](http://image-net.org/download) & [iNaturalist 2018](https://github.com/visipedia/inat_comp/tree/master/2018) dataset, and place them in your `data_path`. Long-tailed version will be created using .txt train/val splits in `imagenet_inat/data/`
 - Change the `data_root` in [`imagenet_inat/main.py`](./imagenet_inat/main.py) accordingly for ImageNet-LT & iNaturalist 2018
 
 ### Dependencies
@@ -44,7 +44,7 @@ Self-supervised pre-training (SSP) helps mitigate the tail classes leakage durin
 ### Main Arguments
 - `--dataset`: name of chosen long-tailed dataset
 - `--imb_factor`: imbalance factor (inverse value of imbalance ratio `\rho` in the paper)
-- `--imb_factor_unlabel`: imbalance factor for unlabeled data (inverse value of unlabeled imbalance ratio `\rho_U`)
+- `--imb_factor_unlabel`: imbalance factor for unlabeled data (inverse value of unlabel imbalance ratio `\rho_U`)
 - `--pretrained_model`: path to self-supervised pre-trained models
 - `--resume`: path to resume checkpoint (also for evaluation)
 
@@ -59,6 +59,8 @@ __CIFAR-10-LT__: CIFAR-10 unlabeled data is prepared following [this repo](https
 - [Unlabeled dataset for CIFAR-10-LT from TinyImages](https://drive.google.com/file/d/1SODQBUvv2qycDivBb4nhHaCk3TMzaVM4/view?usp=sharing)
 
 __SVHN-LT__: Since its own dataset contains an extra part with 531.1K additional (labeled) samples, they are directly used to simulate the unlabeled dataset.
+
+Note that the class imbalance in unlabeled data is also considered, which is controlled by `--imb_factor_unlabel` (`\rho_U` in the paper). See [`imbalance_cifar.py`](dataset/imbalance_cifar.py) and [`imbalance_svhn.py`](dataset/imbalance_svhn.py) for details.
 
 #### Semi-supervised learning with pseudo-labeling
 
