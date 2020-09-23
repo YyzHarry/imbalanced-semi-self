@@ -1,9 +1,14 @@
 # Rethinking the Value of Labels for Improving Class-Imbalanced Learning
 
-This is the source code implementation of ``Rethinking the Value of Labels for Improving Class-Imbalanced Learning''.
+This repository contains the implementation code for paper: <br>
+__Rethinking the Value of Labels for Improving Class-Imbalanced Learning__ <br>
+[Yuzhe Yang](http://www.mit.edu/~yuzhe/), and [Zhi Xu](http://www.mit.edu/~zhixu/) <br>
+_34th Conference on Neural Information Processing Systems (__NeurIPS 2020__)_ <br>
+[[Website](http://www.mit.edu/~yuzhe/imbalanced-semi-self.html)] [[arXiv](https://arxiv.org/abs/2006.07529)] [[Paper](https://arxiv.org/pdf/2006.07529.pdf)] [[Slides]()] [[Video]()]
 
-We provide the code for both the semi-supervised & self-supervised imbalanced learning implementation.
-We plan to clean up all the code and release them soon.
+
+## Overview and Outline
+In this work, we show theoretically and empirically that, both __semi-supervised learning__ (using unlabeled data) and __self-supervised pre-training__ (first pre-train the model with self-supervision) can substantially improve the performance on imbalanced (long-tailed) datasets, regardless of the imbalanceness on labeled/unlabeled data and the base training techniques.
 
 
 ## Dependencies
@@ -38,7 +43,7 @@ Other arguments are listed in each file with explanations.
 
 ### Semi-supervised learning with pseudo-labeling
 Generate pseudo-labels using base classifier trained on original imbalanced dataset
-```
+```bash
 python gen_pseudolabels.py --data_dir <data_path> --output_dir <output_path> --output_filename <save_name>
 ```
 
