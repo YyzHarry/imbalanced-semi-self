@@ -21,12 +21,12 @@ Self-supervised pre-training (SSP) helps mitigate the tail classes leakage durin
 
 ## Installation
 
-### Prerequisites
+#### Prerequisites
 - Download [CIFAR](https://www.cs.toronto.edu/~kriz/cifar.html) & [SVHN](http://ufldl.stanford.edu/housenumbers/) dataset, and place them in your `data_path`. Original data will be converted by [`imbalance_cifar.py`](dataset/imbalance_cifar.py) and [`imbalance_svhn.py`](dataset/imbalance_svhn.py)
 - Download [ImageNet](http://image-net.org/download) & [iNaturalist 2018](https://github.com/visipedia/inat_comp/tree/master/2018) dataset, and place them in your `data_path`. Long-tailed version will be created using .txt train/val splits in `imagenet_inat/data/`
 - Change the `data_root` in [`imagenet_inat/main.py`](./imagenet_inat/main.py) accordingly for ImageNet-LT & iNaturalist 2018
 
-### Dependencies
+#### Dependencies
 - PyTorch (>= 1.2, tested on 1.4)
 - yaml
 - scikit-learn
@@ -35,13 +35,13 @@ Self-supervised pre-training (SSP) helps mitigate the tail classes leakage durin
 
 ## Code Overview
 
-### Main Files
+#### Main Files
 - [`train_semi.py`](train_semi.py): train model with extra unlabeled data, on CIFAR-LT / SVHN-LT
 - [`train.py`](train.py): train model with (or without) SSP, on CIFAR-LT / SVHN-LT
 - [`imagenet_inat/main.py`](./imagenet_inat/main.py): train model with (or without) SSP, on ImageNet-LT / iNaturalist 2018
 - [`pretrain_rot.py`](pretrain_rot.py) & [`pretrain_moco.py`](pretrain_moco.py): self-supervised pre-training using [Rotation prediction](https://arxiv.org/pdf/1803.07728.pdf) or [MoCo](https://arxiv.org/abs/1911.05722)
 
-### Main Arguments
+#### Main Arguments
 - `--dataset`: name of chosen long-tailed dataset
 - `--imb_factor`: imbalance factor (inverse value of imbalance ratio `\rho` in the paper)
 - `--imb_factor_unlabel`: imbalance factor for unlabeled data (inverse value of unlabel imbalance ratio `\rho_U`)
@@ -96,9 +96,9 @@ Train on CIFAR-10-LT with `\rho=100`
 python train.py --dataset cifar10 --imb_factor 0.01 --pretrained_model <path_to_ssp_model>
 ```
 
-Train on ImageNet-LT / iNaturalist 2018 (change `model_dir` to SSP model path in the config file)
+Train on ImageNet-LT / iNaturalist 2018
 ```bash
-python -m imagenet_inat.main --cfg <path_to_ssp_config>
+python -m imagenet_inat.main --cfg <path_to_ssp_config> --model_dir <path_to_ssp_model>
 ```
 
 
@@ -123,7 +123,7 @@ All related data and checkpoints can be found via [this link](https://drive.goog
 |CE + D_U@5x (`\rho=50` and `\rho_U=50`) | 13.16 | [ResNet-32](https://drive.google.com/file/d/1sBkqxI2GiStMWUjKGAmmXLLgT0bJTb0T/view?usp=sharing) |
 |CE + D_U@5x (`\rho=50` and `\rho_U=100`) | 14.54 | [ResNet-32](https://drive.google.com/file/d/1HGNk-tc3iy1cxbTlYGf8nboMZYIUN1nQ/view?usp=sharing) |
 
-To test a pretrained checkpoint, e.g., on CIFAR-10:
+#### Test a pretrained checkpoint
 ```bash
 python train_semi.py --dataset cifar10 --resume <ckpt-path> -e
 ```
@@ -189,7 +189,7 @@ python train_semi.py --dataset cifar10 --resume <ckpt-path> -e
   |CE(Balanced) + SSP |  34.1 | ResNet-50 |
   |cRT + SSP |  31.9 | [ResNet-50](https://drive.google.com/file/d/1bAUFns0CJJJi2-6MpvXCOmRlcciv1ef3/view?usp=sharing) |
 
-To test a pretrained checkpoint:
+#### Test a pretrained checkpoint
 ```bash
 # test on CIFAR-10 / CIFAR-100
 python train.py --dataset cifar10 --resume <ckpt-path> -e
