@@ -44,45 +44,64 @@ Self-supervised pre-training (SSP) helps mitigate the tail classes leakage durin
 ### Main Arguments
 - `--dataset`: name of chosen long-tailed dataset
 - `--imb_factor`: imbalance factor (inverse value of imbalance ratio `\rho` in the paper)
-- `--imb_factor_unlabel`: imbalance factor for unlabeled data (inverse value of unlabeled imbalance ratio `\rho_U` in the paper)
+- `--imb_factor_unlabel`: imbalance factor for unlabeled data (inverse value of unlabeled imbalance ratio `\rho_U`)
 - `--pretrained_model`: path to self-supervised pre-trained models
 - `--resume`: path to resume checkpoint (also for evaluation)
 
 
 ## Getting Started
 
-### Semi-supervised learning with pseudo-labeling
-Generate pseudo-labels using base classifier trained on original imbalanced dataset
+### Semi-Supervised Imbalanced Learning
+
+#### Unlabeled data sourcing
+
+__CIFAR-10-LT__: CIFAR-10 unlabeled data is prepared following [this repo](https://github.com/yaircarmon/semisup-adv) using the [80M TinyImages](https://people.csail.mit.edu/torralba/publications/80millionImages.pdf). In short, a data sourcing model is trained to distinguish CIFAR-10 classes and an "non-CIFAR" class. For each class, images are then ranked based on the prediction confidence, and unlabeled (imbalanced) datasets are constructed accordingly. Use the following link to download the prepared unlabeled data, and place in your `data_path`:
+- [Unlabeled dataset for CIFAR-10-LT from TinyImages](https://drive.google.com/file/d/1SODQBUvv2qycDivBb4nhHaCk3TMzaVM4/view?usp=sharing)
+
+__SVHN-LT__: Since its own dataset contains an extra part with 531.1K additional (labeled) samples, they are directly used to simulate the unlabeled dataset.
+
+#### Semi-supervised learning with pseudo-labeling
+
+To perform pseudo-labeling (self-training), first a base classifier is trained on original imbalanced dataset. With the trained base classifier, pseudo-labels can be generated using
 ```bash
-python gen_pseudolabels.py --data_dir <data_path> --output_dir <output_path> --output_filename <save_name>
+python gen_pseudolabels.py --resume <ckpt-path> --data_dir <data_path> --output_dir <output_path> --output_filename <save_name>
+```
+We provide generated pseudo label files for CIFAR-10-LT & SVHN-LT with `\rho=50`, using base model with standard CE training:
+- [Generated pseudo labels for CIFAR-10-LT with `\rho=50`](https://drive.google.com/file/d/1Z4rwaqzjNoNQ27sofx1aDl8OLH-etoyP/view?usp=sharing)
+- [Generated pseudo labels for SVHN-LT with `\rho=50`](https://drive.google.com/file/d/19VeMQ07unVq3hIjLN5LiXWZNTI4CiN5F/view?usp=sharing)
+
+To train with unlabeled data, for example, on CIFAR-10-LT with `\rho=50` and `\rho_U=50`
+```bash
+python train_semi.py --dataset cifar10 --imb_factor 0.02 --imb_factor_unlabel 0.02
 ```
 
-Train with unlabeled data on CIFAR-10-LT with `\rho=100` and `\rho_U=100`
-```
-python train_semi.py --dataset cifar10 --imb_factor 0.01 --imb_factor_unlabel 0.01
-```
+### Self-Supervised Imbalanced Learning
 
-### Self-supervised Pre-training
-Rotation SSP on CIFAR-10-LT with \rho=100
-```
+#### Self-supervised pre-training (SSP)
+To perform Rotation SSP on CIFAR-10-LT with `\rho=100`
+```bash
 python pretrain_rot.py --dataset cifar10 --imb_factor 0.01
 ```
 
-MoCo SSP on ImageNet-LT
-```
+To perform MoCo SSP on ImageNet-LT
+```bash
 python pretrain_moco.py --dataset imagenet --data <data_path>
 ```
 
-### Network training with SSP models
-Train on CIFAR-10-LT with \rho=100
-```
-python train_semi.py --dataset cifar10 --imb_factor 0.01 --pretrained_model <path_to_your_model>
+#### Network training with SSP models
+Train on CIFAR-10-LT with `\rho=100`
+```bash
+python train.py --dataset cifar10 --imb_factor 0.01 --pretrained_model <path_to_ssp_model>
 ```
 
-Train on ImageNet-LT / iNat
+Train on ImageNet-LT / iNaturalist 2018 (change `model_dir` to SSP model path in the config file)
+```bash
+python -m imagenet_inat.main --cfg <path_to_ssp_config>
 ```
-python imagenet_inat/main.py --cfg <path_to_your_config>
-```
+
+
+## Results and Models
+
 
 
 ## Acknowledgements
