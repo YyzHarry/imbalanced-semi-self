@@ -3,8 +3,18 @@
 This repository contains the implementation code for paper: <br>
 __Rethinking the Value of Labels for Improving Class-Imbalanced Learning__ <br>
 [Yuzhe Yang](http://www.mit.edu/~yuzhe/), and [Zhi Xu](http://www.mit.edu/~zhixu/) <br>
-_34th Conference on Neural Information Processing Systems (__NeurIPS 2020__)_ <br>
-[Website] [[arXiv](https://arxiv.org/abs/2006.07529)] [[Paper](https://arxiv.org/pdf/2006.07529.pdf)] [Slides] [Video]
+_34th Conference on Neural Information Processing Systems (NeurIPS), 2020_ <br>
+[[Website](http://www.mit.edu/~yuzhe/imbalanced-semi-self.html)] [[arXiv](https://arxiv.org/abs/2006.07529)] [[Paper](https://arxiv.org/pdf/2006.07529.pdf)] [Slides] [Video]
+
+If you find this code or idea useful, please consider citing our work:
+```bib
+@inproceedings{yang2020rethinking,
+  title={Rethinking the Value of Labels for Improving Class-Imbalanced Learning},
+  author={Yang, Yuzhe and Xu, Zhi},
+  booktitle={Conference on Neural Information Processing Systems (NeurIPS)},
+  year={2020},
+}
+```
 
 
 ## Overview
@@ -23,7 +33,7 @@ Self-supervised pre-training (SSP) helps mitigate the tail classes leakage durin
 
 #### Prerequisites
 - Download [CIFAR](https://www.cs.toronto.edu/~kriz/cifar.html) & [SVHN](http://ufldl.stanford.edu/housenumbers/) dataset, and place them in your `data_path`. Original data will be converted by [`imbalance_cifar.py`](dataset/imbalance_cifar.py) and [`imbalance_svhn.py`](dataset/imbalance_svhn.py)
-- Download [ImageNet](http://image-net.org/download) & [iNaturalist 2018](https://github.com/visipedia/inat_comp/tree/master/2018) dataset, and place them in your `data_path`. Long-tailed version will be created using .txt train/val splits in `imagenet_inat/data/`
+- Download [ImageNet](http://image-net.org/download) & [iNaturalist 2018](https://github.com/visipedia/inat_comp/tree/master/2018) dataset, and place them in your `data_path`. Long-tailed version will be created using train/val splits (.txt files) in corresponding subfolders under `imagenet_inat/data/`
 - Change the `data_root` in [`imagenet_inat/main.py`](./imagenet_inat/main.py) accordingly for ImageNet-LT & iNaturalist 2018
 
 #### Dependencies
@@ -204,13 +214,5 @@ This code is partly based on the open-source implementations from the following 
 [OpenLongTailRecognition](https://github.com/zhmiao/OpenLongTailRecognition-OLTR), [classifier-balancing](https://github.com/facebookresearch/classifier-balancing), [LDAM-DRW](https://github.com/kaidic/LDAM-DRW), [MoCo](https://github.com/facebookresearch/moco), and [semisup-adv](https://github.com/yaircarmon/semisup-adv).
 
 
-## Citation
-If you find the idea or code useful for your research, please cite [our paper](https://arxiv.org/abs/2006.07529):
-```bib
-@inproceedings{yang2020rethinking,
-  title={Rethinking the Value of Labels for Improving Class-Imbalanced Learning},
-  author={Yang, Yuzhe and Xu, Zhi},
-  booktitle={Conference on Neural Information Processing Systems (NeurIPS)},
-  year={2020},
-}
-```
+## Contact
+If you have any questions, feel free to contact us through Email (yuzhe@mit.edu & zhixu@mit.edu) or Github issues. Enjoy!
