@@ -4,7 +4,7 @@ This repository contains the implementation code for paper: <br>
 __Rethinking the Value of Labels for Improving Class-Imbalanced Learning__ <br>
 [Yuzhe Yang](http://www.mit.edu/~yuzhe/), and [Zhi Xu](http://www.mit.edu/~zhixu/) <br>
 _34th Conference on Neural Information Processing Systems (NeurIPS), 2020_ <br>
-[[Website](http://www.mit.edu/~yuzhe/imbalanced-semi-self.html)] [[arXiv](https://arxiv.org/abs/2006.07529)] [[Paper](https://arxiv.org/pdf/2006.07529.pdf)] [Slides] [Video]
+[[Website](https://www.mit.edu/~yuzhe/imbalanced-semi-self.html)] [[arXiv](https://arxiv.org/abs/2006.07529)] [[Paper](https://arxiv.org/pdf/2006.07529.pdf)] [Slides] [Video]
 
 If you find this code or idea useful, please consider citing our work:
 ```bib
@@ -12,7 +12,7 @@ If you find this code or idea useful, please consider citing our work:
   title={Rethinking the Value of Labels for Improving Class-Imbalanced Learning},
   author={Yang, Yuzhe and Xu, Zhi},
   booktitle={Conference on Neural Information Processing Systems (NeurIPS)},
-  year={2020},
+  year={2020}
 }
 ```
 
@@ -215,4 +215,4 @@ This code is partly based on the open-source implementations from the following 
 
 
 ## Contact
-If you have any questions, feel free to contact us through Email (yuzhe@mit.edu & zhixu@mit.edu) or Github issues. Enjoy!
+If you have any questions, feel free to contact us through email (yuzhe@mit.edu & zhixu@mit.edu) or Github issues. Enjoy!
