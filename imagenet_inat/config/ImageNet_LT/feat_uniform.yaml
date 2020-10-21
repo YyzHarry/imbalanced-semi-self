@@ -24,7 +24,7 @@ networks:
 shuffle: false
 training_opt:
   backbone: resnet50
-  batch_size: 100
+  batch_size: 128
   dataset: ImageNet_LT
   display_step: 10
   feature_dim: 2048
